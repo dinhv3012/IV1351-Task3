@@ -23,4 +23,4 @@ FROM
 JOIN 
     price_category pc ON l.price_id = pc.id
 JOIN 
-    students s ON l.student_id = s.id; 
+    student s ON l.student_id = s.id; 
