@@ -1,6 +1,6 @@
 -- SQL Task 1 Query to show the number of lessons given per month for the specified year.
 
--- First, create a view to count different types of lessons per month
+--  create a view to count different types of lessons per month
 CREATE VIEW Monthly_Lesson_Count AS
 SELECT 
     TO_CHAR(time, 'Mon') AS "Month",
@@ -17,12 +17,20 @@ GROUP BY
 ORDER BY 
     MIN(time);
 
--- Query nr 1:  Select all lessons given each month in a year
-CREATE VIEW lesson_count_month AS
-    SELECT
-	EXTRACT(month FROM time) AS month,
-	count(*) FROM lesson WHERE EXTRACT(YEAR FROM time) = '2023' GROUP BY EXTRACT(month FROM time)
-	ORDER BY EXTRACT(month FROM time) ASC;
+-- Query to Select all lessons given each month in a year.
+
+CREATE VIEW Monthly_Lesson_Summary_2023 AS
+SELECT
+    EXTRACT(month FROM time) AS month,
+    COUNT(*) AS lesson_count
+FROM 
+    lesson
+WHERE 
+    EXTRACT(YEAR FROM time) = 2023
+GROUP BY 
+    EXTRACT(month FROM time)
+ORDER BY 
+    EXTRACT(month FROM time);
 
 
 -- SQL Task 2 Query to count the number of students with 0, 1, 2 siblings 
@@ -37,8 +45,9 @@ FROM
     LEFT JOIN sibling sb ON s.id = sb.student_id OR s.id = sb.sibling_id
 GROUP BY s.id;
 
--- Now, use the view to count how many students have 0, 1, 2 siblings
+-- Now, use the view to count how many students have 0, 1, 2 siblings by reused the created view:
 
+CREATE VIEW Student_Sibling_Summary AS
 SELECT 
     sibling_count AS "No of Siblings", 
     COUNT(student_id) AS "No of Students"
@@ -50,6 +59,7 @@ GROUP BY
     sibling_count
 ORDER BY 
     sibling_count;
+
 
 -- Query Task 3, to count the number of lessons been tought by instructor! 
 
@@ -79,7 +89,7 @@ ORDER BY
 
 
 
--- Query nr 5: show and list all ensembles held during the next week, sorted by music genre and weekday
+-- Query Task4 show and list all ensembles held during the next week, sorted by music genre and weekday
 
 CREATE MATERIALIZED VIEW ensemble_lessons_view AS
 SELECT
@@ -107,3 +117,4 @@ WHERE
 ORDER BY
     Day ASC,
     Genre ASC;
+
